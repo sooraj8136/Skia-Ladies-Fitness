@@ -22,9 +22,10 @@ export function Home() {
       <section ref={heroRef} className="relative h-screen min-h-[700px] overflow-hidden flex items-center justify-center">
         <motion.div style={{ y: heroY, scale: heroScale }} className="absolute inset-0">
           <img
-            src="https://images.pexels.com/photos/4944006/pexels-photo-4944006.jpeg?auto=compress&cs=tinysrgb&w=1920"
+            src="https://images.pexels.com/photos/4944006/pexels-photo-4944006.jpeg?auto=compress&cs=tinysrgb&w=1200"
             alt="Woman strength training at SKIA MGF Ladies Gym"
             className="w-full h-full object-cover"
+            loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-ink/60 via-ink/40 to-ink" />
           <div className="absolute inset-0 bg-gradient-to-r from-ink/80 to-transparent" />
@@ -257,9 +258,11 @@ export function Home() {
       {/* CTA BANNER */}
       <section className="relative py-32 px-6 md:px-12 lg:px-24 overflow-hidden bg-ink-surface">
         <motion.div
+          initial={false}
           animate={{ x: ['0%', '100%'] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 20, repeat: Infinity, ease: 'linear', delay: 1.2 }}
           className="absolute inset-0 opacity-5"
+          style={{ willChange: 'transform' }}
         >
           <div className="display-text text-[20rem] whitespace-nowrap text-yellow leading-none">
             READY · READY · READY ·
@@ -316,7 +319,7 @@ function TestimonialCarousel() {
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
-              initial={{ opacity: 0, y: 30 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -30 }}
               transition={{ duration: 0.5 }}

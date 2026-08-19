@@ -10,9 +10,18 @@ export function Navbar() {
   const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40);
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 40);
+          ticking = false;
+        });
+      }
+    };
     onScroll();
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -30,11 +39,12 @@ export function Navbar() {
   return (
     <>
       <motion.nav
-        initial={{ y: -100 }}
+        initial={false}
         animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-          scrolled ? 'bg-ink/90 backdrop-blur-xl border-b border-ink-border' : 'bg-transparent'
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        style={{ willChange: 'transform' }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
+          scrolled ? 'bg-ink/95 border-b border-ink-border' : 'bg-transparent'
         }`}
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-16 flex items-center justify-between h-20">

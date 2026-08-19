@@ -96,15 +96,23 @@ export function Counter({ value, suffix = '', duration = 2 }: { value: number; s
     if (!inView) return;
     let start = 0;
     const startTime = performance.now();
+    let rafId: number | null = null;
     const animate = (now: number) => {
       const elapsed = (now - startTime) / 1000;
       const progress = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.floor(start + (value - start) * eased));
-      if (progress < 1) requestAnimationFrame(animate);
+      if (progress < 1) rafId = requestAnimationFrame(animate);
       else setCount(value);
     };
-    requestAnimationFrame(animate);
+    // small randomized stagger to avoid many rAFs firing exactly together
+    const timeout = window.setTimeout(() => {
+      rafId = requestAnimationFrame(animate);
+    }, Math.floor(Math.random() * 120));
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      clearTimeout(timeout);
+    };
   }, [inView, value, duration]);
 
   return (
